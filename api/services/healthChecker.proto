@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package health;
+
+service HealthChecker {
+  rpc allSymptoms(voidNoParam) returns (Symptoms);
+  rpc createSymptom(Symptom) returns (Symptom);
+  rpc getDiagnosis(MedicalSymptom) returns (stream Diagnosis);
+  rpc deleteSymptom(symptomId) returns (Symptom);
+}
+
+message Diagnosis { string diagnosis = 1; }
+message symptomId { int32 id = 1; }
+message voidNoParam { }
+
+message MedicalSymptom {
+  Patient patient = 1; //The patient information.
+  repeated Symptom symptoms = 2;    //The symptom information.
+}
+
+message Patient {
+  int32 age = 1;
+  Gender gender = 2;
+
+  enum Gender {
+    UNKNOWN_GENDER = 0;
+    MALE = 1;
+    FEMALE = 2;
+    MALE_TO_FEMALE = 3;
+    FEMALE_TO_MALE = 4;
+    BOTH_GENDER = 5 ; //Both gender
+
+    //The Gender enum values are used to define the gender of a patient.
+    //The values are used to define the gender of a patient.
+     //UNKNOWN_GENDER = 0; MALE, FEMALE and BOTH_GENDER are reserved for future use.
+
+  }
+}
+
+// The Symptom message represents a single symptom.
+message Symptom {
+  int32 id = 1;
+  int32 apptId = 2;
+  string name = 3;  // The name of the symptom.
+  Severity severity = 4;  // The severity of the symptom.
+
+  // The Severity enum represents the severity of a symptom.
+  enum Severity {
+    UNKNOWN_SEVERITY = 0;  // The severity is unknown.
+    MILD = 1;  // The symptom is mild.
+    MODERATE = 2;  // The symptom is moderate.
+    SEVERE = 3;  // The symptom is severe.
+  }
+}
+
+// The Symptoms message represents a list of symptoms.
+message Symptoms {
+  repeated Symptom symptoms = 1;  // The list of symptoms.
+}
+
+message SymptomsList {
+  Symptoms symptoms = 1;
+  string  diagnosis = 2;
+}
