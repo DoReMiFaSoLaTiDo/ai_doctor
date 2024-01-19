@@ -2,7 +2,7 @@ version: '3.8'
 services:
   api:
     depends_on:
-      - postgresdb
+      - postgres
     build: ./api
     container_name: api_backend
     env_file:
@@ -18,18 +18,14 @@ services:
     container_name: client_frontend
     ports:
       - '3000:3000'
-  postgresdb:
-    container_name: local-postgres
-    image: postgres
-    restart: always
-    env_file: ./.env
-    environment:
-      - POSTGRES_USER=$POSTGRESDB_USER
-      - POSTGRES_PASSWORD=$POSTGRESDB_ROOT_PASSWORD
-      - POSTGRES_DB=$POSTGRESDB_DATABASE
+  postgres:
+    image: ankane/pgvector
     ports:
-      - $POSTGRESDB_LOCAL_PORT:$POSTGRESDB_DOCKER_PORT
+      - '6500:5432'
+    restart: always
+    env_file:
+      - ./.env
     volumes:
-      - db:/var/lib/postgres
+      - postgres-db:/var/lib/postgresql/data
 volumes:
-  db:
+  postgres-db:
