@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+model Patient {
+  id            Int            @id @default(autoincrement())
+  uuid          String         @unique @default(uuid())
+  first_name    String
+  last_name     String
+  gender        String
+  allergies     String[]
+  phn           String         @unique
+  birthday      DateTime       @default(now())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  consultations Consultation[]
+
+  @@map("patients")
+}
+
+model Consultation {
+  id                Int                    @id @default(autoincrement())
+  noteId            Int
+  patientId         Int
+  recommendation    String
+  medication        String
+  consultation_date DateTime               @default(now())
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  note              Note                   @relation(fields: [noteId], references: [id])
+  patient           Patient                @relation(fields: [patientId], references: [id])
+
+  @@map("consultations")
+}
+
+model Note {
+  id                Int                     @id @default(autoincrement())
+  Symptoms          Syptom[]
+  embedding         Unsupported("vector")?
+}
+
+model Syptom {
+  id                Int                     @id @default(autoincrement())
+  name              String
+  severity          Int                     @default(0)
+  embedding         Unsupported("vector")?
+
+  @@map("symptoms")
+}

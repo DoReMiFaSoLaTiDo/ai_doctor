@@ -21,7 +21,9 @@ server.addService(healthPackage.HealthChecker.service, {
   "deleteSymptom": deleteSymptom
 });
 
-
+/** TODO: Fill in the requisite functions when datastore becomes available. 
+ * Code to implement the various fuctions comes later after embedding task
+ */
 server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
 server.start();
 console.log("Started server at localhost:50051");
