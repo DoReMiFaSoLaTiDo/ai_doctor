@@ -14,6 +14,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
     const cleanedDiseases = [];
     const uncapturedDiseases = [];
+
     // Filter out the diseases with null symptoms or diagnosis
     diseases.forEach(disease => {
       const { name, symptoms, treatment } = disease;
@@ -42,6 +43,7 @@ fs.readFile(filePath, 'utf8', (err, data) => {
 
 });
 
+// word breakers that define new sections
 const breakers = {
   symptoms: {
     endStrings: ["Products & Services", "Enlarge image", "\nRequest an appointment", "\nMore Information", "\nBy Mayo Clinic Staff"],
@@ -53,6 +55,7 @@ const breakers = {
   }
 }
 
+// clean the words and eliminate puff words
 const cleanWords = (words, mode) => {
   if (words == null || words == 'undefined') return '';
   const endStrings = breakers[mode].endStrings;
@@ -74,10 +77,11 @@ const cleanWords = (words, mode) => {
     if (endKey == endStrings[-1] || startPos == -1 || endPos == -1) endReached = true;
     if (startPos != -1 && endPos != -1) resultString += words.substring(startPos, endPos);
   }
-  resultString = resultString.replace(/(\r\n|\n+|\r|\t)/gm,' ');
+  resultString = resultString.replace(/(\r\n|\n|\r|\t)+/gm,' ');
   return resultString;
 }
 
+// get the index of the searchTerms in the words starting from position
 const getIndex = (from, searchTerms, words) => {
   let index = -1;
   let key, searchIndex;
