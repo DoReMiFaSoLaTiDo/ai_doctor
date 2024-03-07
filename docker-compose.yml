@@ -11,7 +11,7 @@ services:
     ports:
       - '4000:4000'
     volumes:
-      - ./api:/app
+      - .api:/app
       - /app/node_modules
   client:
     depends_on:
@@ -23,8 +23,9 @@ services:
       - '3000:3000'
   postgres:
     image: ankane/pgvector
+    container_name: postgres
     ports:
-      - '6500:5432'
+      - '2345:5432'
     restart: always
     env_file:
       - ./.env

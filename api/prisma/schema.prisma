@@ -45,15 +45,40 @@ model Consultation {
 
 model Note {
   id                Int                     @id @default(autoincrement())
-  Symptoms          Syptom[]
+  content           String
   embedding         Unsupported("vector")?
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  symptoms          SymptomsOnNotes[]
+  consultations     Consultation[]
 }
 
-model Syptom {
+model Symptom {
   id                Int                     @id @default(autoincrement())
   name              String
   severity          Int                     @default(0)
   embedding         Unsupported("vector")?
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  notes             SymptomsOnNotes[]
+}
 
-  @@map("symptoms")
+model SymptomsOnNotes {
+  note              Note                    @relation(fields: [noteId], references: [id])
+  noteId            Int
+  symptom           Symptom                 @relation(fields: [symptomId], references: [id])
+  symptomId         Int
+  createdAt         DateTime                @default(now())
+
+  @@id([noteId, symptomId])
+}
+
+model disease {
+  id                Int                     @id @default(autoincrement())
+  name              String
+  embedding         Unsupported("vector")?
+  symptoms          String
+  diagnosis         String
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
 }

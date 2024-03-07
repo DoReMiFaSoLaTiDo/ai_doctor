@@ -14,7 +14,7 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 4000;
 
 app.get('/', (req, res) => {
   const response = {

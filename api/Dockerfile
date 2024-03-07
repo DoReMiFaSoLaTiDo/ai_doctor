@@ -1,13 +1,15 @@
 FROM node:16-alpine
 
-WORKDIR /app
+WORKDIR /api
 
-COPY package.json .
+COPY ./package*.json ./
+
+COPY prisma ./prisma/
 
 RUN npm install
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 4000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:migrate"]
